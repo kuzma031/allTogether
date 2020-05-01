@@ -5,7 +5,7 @@ module.exports = async (req,res,next) => {
         if(!req.get('Authorization')) return res.status(401).json({ success: false, message: '401 Unauthorized'});
 
         const token = req.get('Authorization').split(' ')[1]; //Authorization: Bearer <token>
-        const decodedToken = await jwt.verify(token, process.env.JWTSecret);
+        const decodedToken = await jwt.verify(token, process.env.JWTSecret || 'string123AllToghetherJWTSecret&&_321');
         // console.log(decodedToken) 
         req.id = decodedToken.id;
         next();

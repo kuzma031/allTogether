@@ -4,13 +4,13 @@ const AWS = require('aws-sdk');
 
 AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    accessKeyId: process.env.AWS_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY
     // region: 'eu-west'
 });
 
 const s3 = new AWS.S3();
 
-const upload = multer({
+const uploadAnswer = multer({
     storage: multerS3({
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
@@ -22,4 +22,19 @@ const upload = multer({
     })
 }).single('answer');
 
-module.exports =  upload;
+const uploadLogo = multer({
+    storage: multerS3({
+        acl: 'public-read',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        s3,
+        bucket: 'djordjetest',
+        key: (req,file,cb) => {
+            cb(null, file.originalname);
+        }
+    })
+}).single('logo');
+
+module.exports =  { 
+    uploadAnswer,
+    uploadLogo
+};

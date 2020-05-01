@@ -1,15 +1,53 @@
 const Question = require('../model/question');
 const Answer = require('../model/answer');
+const Options = require('../model/options');
 
-exports.changeLogo = async (req,res) => {
+exports.changeLogo = async (req,res, next) => {
     try {
-        console.log('change logo');
+        const options = await Options.findOne();
+        
+        options.logo = req.file.location;
+        await options.save();
+        
+        return res.status(200).json({ success: true, options , message: 'Logo changed' });
     } catch(err) {
-        console.log(err);
+        return next(new Error(err));
     }
 }
 
-exports.addNewQuestion = async (req,res) => {
+exports.changeMessage = async (req,res,next) => {
+    try {
+        const { startMessage, endMessage } = req.body;
+
+        const options = await Options.findOne();
+
+        if(!startMessage || !endMessage ) return res.status(400).json({ success: false, message: 'Fill all fields' });
+
+        options.startMessage.heading = startMessage.heading;
+        options.startMessage.message = startMessage.message;
+        options.endMessage.heading = endMessage.heading;
+        options.endMessage.message = endMessage.message;
+
+        await options.save();
+
+        return res.status(200).json({ success: true, options , message: 'Messages updated' });
+
+    } catch(err) {
+        return next(new Error(err));
+    }
+}
+
+exports.getOptions = async (req,res,next) => {
+    try {
+        const options = await Options.findOne();
+
+        return res.status(200).json({ success: true, options });
+    } catch(err) {
+        return next(new Error(err));
+    }
+}
+
+exports.addNewQuestion = async (req,res, next) => {
     try {
         const { content, answerTime } = req.body;
 
@@ -25,22 +63,22 @@ exports.addNewQuestion = async (req,res) => {
         return res.status(200).json({ success: true, question, message: 'Question added' });
 
     } catch(err) {
-        console.log(err);
+        return next(new Error(err));
     }
 };
 
-exports.getAllQuestions = async (req,res) => {
+exports.getAllQuestions = async (req,res, next) => {
     try {
         const questions = await Question.find();
 
         return res.status(200).json({ success: true, questions });
 
     } catch(err) {
-        console.log(err);
+        return next(new Error(err));
     }
 }
 
-exports.deleteQuestion = async (req,res) => {
+exports.deleteQuestion = async (req,res, next) => {
     try {
         const id = req.body.id;
 
@@ -62,11 +100,11 @@ exports.deleteQuestion = async (req,res) => {
             });
         }
     } catch(err) {
-        console.log(err);
+        return next(new Error(err));
     }
 }
 
-exports.editQuestion = async (req,res) => {
+exports.editQuestion = async (req,res, next) => {
     try {
         const { id, content, answerTime } = req.body;
 
@@ -86,6 +124,6 @@ exports.editQuestion = async (req,res) => {
         return res.status(200).json({ success: true, question, message: 'Question edited' });
 
     } catch(err) {
-        console.log(err);
+        return next(new Error(err));
     }
 }

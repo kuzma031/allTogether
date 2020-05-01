@@ -1,7 +1,7 @@
 const express = require('express');
 
 const isAuth = require('../middlewares/isAuth');
-const upload = require('../middlewares/multer');
+const { uploadAnswer } = require('../middlewares/multer');
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post('/delete', controller.deleteUser);
 router.get('/all', controller.getAllUsers);
 
 // Videos
-router.post('/submit-answer', isAuth, upload, controller.submitAnswer);
+router.post('/submit-answer', isAuth, uploadAnswer,  controller.submitAnswer);
 router.get('/answers/:id', controller.getAnswers );
 
 module.exports = router;

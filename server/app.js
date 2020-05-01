@@ -22,9 +22,15 @@ const mainRoutes = require('./routes/main');
 app.use('/user', userRoutes);
 app.use('/', mainRoutes);
 
+// Error handler
+app.use((error, req, res, next) => {
+    console.log(error)
+    return res.status(400).json({ success: false, message: `Server error - ${error.name}` });
+});
+
 const connect = async () => {
     const conn = await mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-    if(conn) app.listen(4000);
+    if(conn) app.listen(process.env.PORT || 4000);
 }
 
 module.exports = connect;
