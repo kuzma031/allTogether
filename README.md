@@ -1,7 +1,9 @@
 # AllToghether
-AllToghether is MERN stack web app built during Covid-19 pandemic. 
+AllToghether is MERN stack web app where interns of company take answers ( videos ) on questions on pandemic.
 
 On React frontend users take videos with webcam which are submitted to Node server. Admins can view videos on admin panel.
+
+Basic styling, it was created in rush during Covid-19 pandemic.
 
 ![Open](https://github.com/kuzma031/allTogether/blob/master/screenshots/open.png)
 ![Questions](https://github.com/kuzma031/allTogether/blob/master/screenshots/questionline.png)
